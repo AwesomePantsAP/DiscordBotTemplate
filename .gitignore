@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#ffmpeg
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe
+
 # C extensions
 *.so
 
