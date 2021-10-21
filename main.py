@@ -155,4 +155,4 @@ async def clear(ctx, amount=5):
     await ctx.send("Messages have been cleared")
 
 
-client.run("NTY1NDk5NjUzMDg1MzMxNDk2.XK3Ulw.2h7jXJp0ljXFtItkm8ZqRXK0w2g")
+client.run("")
