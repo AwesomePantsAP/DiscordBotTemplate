@@ -198,7 +198,6 @@ async def clear(ctx, amount=5):
 #get the bot token
 token_file = open("token.txt")
 token = token_file.read()
-print(token)
 
 #start the bot
 client.run(token)
