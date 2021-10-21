@@ -6,6 +6,7 @@ from discord.utils import get
 from discord import FFmpegPCMAudio
 from discord import TextChannel
 from youtube_dl import YoutubeDL
+import asyncio
 
 client = commands.Bot(command_prefix='q_')  # prefix our commands with '.'
 
@@ -154,5 +155,10 @@ async def clear(ctx, amount=5):
     await ctx.channel.purge(limit=amount)
     await ctx.send("Messages have been cleared")
 
+#get the bot token
+token_file = open("token.txt")
+token = token_file.read()
+print(token)
 
-client.run("")
+#start the bot
+client.run(token)
