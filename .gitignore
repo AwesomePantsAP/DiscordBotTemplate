@@ -8,6 +8,10 @@ ffmpeg.exe
 ffplay.exe
 ffprobe.exe
 
+#youtube-dl
+/share
+/etc
+
 #token file
 token.txt
 
