@@ -76,6 +76,10 @@ class MusicCog(commands.Cog):
 
             #wait for the future to be marked done
             await self.song_done_future
+            #destroy the future
+            self.song_done_future = None
+            await asyncio.sleep(1)
+            voice.stop()
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def music(self, ctx):
