@@ -221,3 +221,23 @@ class MusicCog(commands.Cog):
     async def skip(self, ctx):
         self.song_done_future.set_result(True)
         await ctx.send("Song skipped! :track_next:")
+
+    @music.command()
+    async def remove(self, ctx, index):
+        #try to get the index as an integer
+        int_index = None
+        try:
+            int_index = int(index)
+        except ValueError:
+            self.ctx.send(f"Can't remove song `{index}`! Index not a number!")
+            return
+
+        #try to remove the index
+        try:
+            self.queue.pop(index)
+        except IndexError:
+            self.ctx.send(f"Can't remove song `{index}`! Not in queue!")
+            return
+
+        #success!
+        self.ctx.send(f"Removed song `{index}`! :boom:")
