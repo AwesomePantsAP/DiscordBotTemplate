@@ -1,5 +1,5 @@
 from discord.ext import commands
-from setup_cog import SetupCog
+from cogs.setup_cog import SetupCog
 import sqlite3
 
 class DatabaseCog(SetupCog):

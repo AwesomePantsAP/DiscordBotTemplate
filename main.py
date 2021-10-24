@@ -4,7 +4,7 @@ import asyncio
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 
-from cogs import music_cog, database_cog, cog_cog_manager
+from cogs import cog_cog_manager
 
 client = commands.Bot(command_prefix='!')  # prefix our commands with '!'
 
