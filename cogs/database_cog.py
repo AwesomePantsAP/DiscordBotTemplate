@@ -3,9 +3,9 @@ import sqlite3
 
 class DatabaseCog(commands.Cog):
     #gets the database and checks that all servers have entries in the "servers" table
-    def setup(self, database_path, bot):
+    def setup(self, bot):
         #get the database connection
-        self.connection = sqlite3.connect(database_path)
+        self.connection = sqlite3.connect("db.sqlite3")
 
         #create the guilds table if it doesn't exist
         create_table_query = """CREATE TABLE IF NOT EXISTS guilds (

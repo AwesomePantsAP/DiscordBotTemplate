@@ -14,16 +14,10 @@ cog_manager = cog_cog_manager.CogManagerCog(
     ("cogs.music_cog", "MusicCog"),
     ("cogs.database_cog", "DatabaseCog")
 )
-client.add_cog(cog_manager)
-client.add_cog(music_cog.MusicCog(client))
-data_cog = database_cog.DatabaseCog()
-client.add_cog(data_cog)
 
 @client.event  # check if bot is ready
 async def on_ready():
     print('Bot online')
-
-    data_cog.setup("db.sqlite3", client)
 
 # command to clear channel messages
 @client.command()
