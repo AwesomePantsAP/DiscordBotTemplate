@@ -49,7 +49,7 @@ def get_song_info(song_name):
 class MusicCog(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.queue = []
+        self.queues = {}
         self.song_done_future = None
 
     #plays the next song in the queue
@@ -58,9 +58,9 @@ class MusicCog(commands.Cog):
         FFMPEG_OPTIONS = {
             'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
-        while len(self.queue) != 0:
+        while len(self.queues[str(ctx.message.guild.id)]) != 0:
             #get and remove the next song in the queue
-            song = self.queue.pop(0)
+            song = self.queues[str(ctx.message.guild.id)].pop(0)
 
             #get the voice client of the bot in the guild
             voice = get(self.client.voice_clients, guild=ctx.guild)
@@ -80,6 +80,7 @@ class MusicCog(commands.Cog):
             self.song_done_future = None
             await asyncio.sleep(1)
             voice.stop()
+        self.queues.remove(str(ctx.message.guild.id))
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def music(self, ctx):
@@ -94,9 +95,9 @@ class MusicCog(commands.Cog):
         #start the message as a css codeblock(for looks only)
         final_message = "```css\nQueue:"
         #iterate through each song in the queue
-        for song_i in range(len(self.queue)):
+        for song_i in range(len(self.queues[str(ctx.message.guild.id)])):
             #get the current song
-            song = self.queue[song_i]
+            song = self.queues[str(ctx.message.guild.id)][song_i]
             #add the formatted template string onto the message
             final_message += queue_entry_template.format(
                 song_i + 1,
@@ -149,9 +150,14 @@ class MusicCog(commands.Cog):
         song_name = ctx.message.content[len(ctx.prefix) + len("music play") + 1:]
         print(song_name)
 
+        #does this server have a queue?
+        if not str(ctx.message.guild.id) in self.queues:
+            #nope, add a queue
+            self.queues.append(str(ctx.message.guild.id), [])
+
         #add all the songs(for one song we still get a playlist of one) to the queue
         song_info = get_song_info(song_name)
-        self.queue += song_info
+        self.queues[str(ctx.message.guild.id)] += song_info
 
         #only begin playing if we aren't already playing a song
         if not voice.is_playing():
@@ -207,14 +213,14 @@ class MusicCog(commands.Cog):
         if voice.is_playing():
             #stop
             voice.stop()
-            self.queue = []
+            self.queues[str(ctx.message.guild.id)] = []
             await ctx.send('Stopped! :stop_button:')
         else:
             await ctx.send("Already Stopped!")
 
     @queue.command()
     async def empty(self, ctx):
-        self.queue = []
+        self.queues[str(ctx.message.guild.id)] = []
         await ctx.send("Queue emptied! :boom:")
 
     @music.command()
@@ -234,7 +240,7 @@ class MusicCog(commands.Cog):
 
         #try to remove the index
         try:
-            self.queue.pop(int_index)
+            self.queues[str(ctx.message.guild.id)].pop(int_index)
         except IndexError:
             await ctx.send(f"Can't remove song `{int_index}`! Not in queue!")
             return
