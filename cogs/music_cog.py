@@ -86,7 +86,7 @@ class MusicCog(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send("<@521285684271513601> Implement a help message system already you lazy bitch")
 
-    @music.command()
+    @music.group(pass_context=True, invoke_without_command=True)
     async def queue(self, ctx):
         #template string for string.format
         queue_entry_template = "\n\t{0}. {1}: Length: {2}"
@@ -212,7 +212,7 @@ class MusicCog(commands.Cog):
         else:
             await ctx.send("Already Stopped!")
 
-    @music.command()
+    @queue.command()
     async def empty(self, ctx):
         self.queue = []
         await ctx.send("Queue emptied! :boom:")
