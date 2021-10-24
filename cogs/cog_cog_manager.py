@@ -1,6 +1,7 @@
 from discord.ext import commands
 import importlib
 from os import getcwd
+from setup_cog import SetupCog
 
 class CogManagerCog(commands.Cog):
     def __init__(self, bot, *args):
@@ -34,6 +35,12 @@ class CogManagerCog(commands.Cog):
         print(f"CogManagerCog >>> Valid Cogs Found: {len(self.cogs)}")
         for module_name, cog_class in self.cogs.items():
             print(f"\tCog: {module_name}::{cog_class}")
+
+    #yields a cog if it is an instance of SetupCog
+    def get_cogs_with_setup(self):
+        for cog in self.cogs.items():
+            if isinstance(cog, SetupCog):
+                yield cog
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def managecogs(self, ctx):
