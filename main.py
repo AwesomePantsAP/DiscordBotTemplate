@@ -4,11 +4,17 @@ import asyncio
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 
-from cogs import music_cog, database_cog
+from cogs import music_cog, database_cog, cog_cog_manager
 
 client = commands.Bot(command_prefix='!')  # prefix our commands with '!'
 
 #load cogs
+cog_manager = cog_cog_manager.CogManagerCog(
+    client,
+    ("cogs.music_cog", "MusicCog"),
+    ("cogs.database_cog", "DatabaseCog")
+)
+client.add_cog(cog_manager)
 client.add_cog(music_cog.MusicCog(client))
 data_cog = database_cog.DatabaseCog()
 client.add_cog(data_cog)
