@@ -89,13 +89,22 @@ class MusicCog(commands.Cog):
 
     @music.group(pass_context=True, invoke_without_command=True)
     async def queue(self, ctx):
+        #does the server have a queue?
+        g_id = str(ctx.message.guild.id)
+        if not g_id in self.queues:
+            await ctx.send("No queue!")
+            return
+        if self.queues[g_id] == []:
+            await ctx.send("No queue!")
+            return
+
         #template string for string.format
         queue_entry_template = "\n\t{0}. {1}: Length: {2}"
 
         #start the message as a css codeblock(for looks only)
         final_message = "```css\nQueue:"
         #iterate through each song in the queue
-        for song_i in range(len(self.queues[str(ctx.message.guild.id)])):
+        for song_i in range(len(self.queues[g_id])):
             #get the current song
             song = self.queues[str(ctx.message.guild.id)][song_i]
             #add the formatted template string onto the message
