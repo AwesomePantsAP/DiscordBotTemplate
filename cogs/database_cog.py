@@ -1,38 +1,40 @@
 from discord.ext import commands
-from enum import Enum
+import sqlite3
 
-#datatype of a column in a table
-class ColumnDatatype(Enum):
-    NONE = 0
-    PRIMARY_KEY = 1
-    UNIQUE = 2
-    NOT_NULL = 3
-
-#column in a table
-class TableColumn:
-    def __init__(self, name, data_type, constraints, without_rowid=False):
-        self.name = name
-        self.data_type = data_type
-        self.constraints = constraints
-        self.without_rowid = without_rowid
-
-    def as_sql():
-        pass
-
-#describes a table
-class Table:
-    def __init__(self, name, **kwargs):
-        pass
-
-class DatabaseCog(commands.cog):
+class DatabaseCog(commands.Cog):
     #gets the database and checks that all servers have entries in the "servers" table
-    def __init__(self, database_path):
+    def setup(self, database_path, bot):
         #get the database connection
-        #store it
+        self.connection = sqlite3.connect(database_path)
 
-        #set up tables if they don't exist
-        pass
+        #create the guilds table if it doesn't exist
+        create_table_query = """CREATE TABLE IF NOT EXISTS guilds (
+            guild_id VARCHAR(18) PRIMARY KEY NOT NULL UNIQUE,
+            guild_name VARCHAR(64) NOT NULL
+        )
+        """
+        self.do_query(create_table_query)
 
-    #creates table in database
-    def CreateTable(self, table):
-        pass
+        #iterate through the guilds the bot is in and ensure they have an entry
+        #in the `guilds` table
+        for guild in bot.guilds:
+            print(f"DatabaseCog >>> Checking record for {guild.id}::`{guild.name}`")
+            guild_record = self.do_query("SELECT * FROM guilds WHERE guild_id = ?;", (str(guild.id),)).fetchone()
+
+            #is the record an instance of cursor?
+            if isinstance(guild_record, type(None)):
+                #yes, the result is None(it can't be multiple)
+                #the record doesn't exist, add one
+                print("\tNo record found: Creating record")
+                self.do_query("INSERT INTO guilds VALUES (?, ?)", (str(guild.id), guild.name))
+                self.connection.commit()
+                guild_record = self.do_query("SELECT * FROM guilds WHERE guild_id = ?;", (str(guild.id),)).fetchone()
+                print(f"\tRecord Created: {guild_record}")
+            else:
+                #otherwise we don't need to do anything
+                print(f"\tRecord found: {guild_record}")
+
+    #executes query on database
+    def do_query(self, query, arguments=()):
+        cursor = self.connection.cursor()
+        return cursor.execute(query, arguments)
