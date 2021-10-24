@@ -229,15 +229,15 @@ class MusicCog(commands.Cog):
         try:
             int_index = int(index)
         except ValueError:
-            self.ctx.send(f"Can't remove song `{index}`! Index not a number!")
+            await ctx.send(f"Can't remove song `{index}`! Index not a number!")
             return
 
         #try to remove the index
         try:
-            self.queue.pop(index)
+            self.queue.pop(int_index)
         except IndexError:
-            self.ctx.send(f"Can't remove song `{index}`! Not in queue!")
+            await ctx.send(f"Can't remove song `{int_index}`! Not in queue!")
             return
 
         #success!
-        self.ctx.send(f"Removed song `{index}`! :boom:")
+        await ctx.send(f"Removed song `{int_index}`! :boom:")
