@@ -9,10 +9,10 @@ from cogs import cog_cog_manager
 client = commands.Bot(command_prefix='!')  # prefix our commands with '!'
 
 #load cogs
-cog_manager = cog_cog_manager.CogManagerCog(
+cog_manager = cog_cog_manager.cog_cog_manager(
     client,
-    ("cogs.cog_music", "MusicCog"),
-    ("cogs.cog_database", "DatabaseCog")
+    "cog_music",
+    "cog_database"
 )
 
 @client.event  # check if bot is ready

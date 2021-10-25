@@ -47,7 +47,7 @@ def get_song_info(song_name):
             songs.append(Song(first_result['url'], first_result["title"], first_result["duration"]))
             return songs
 
-class MusicCog(BaseCog):
+class cog_music(BaseCog):
     def __init__(self, client):
         self.client = client
         self.queues = {}

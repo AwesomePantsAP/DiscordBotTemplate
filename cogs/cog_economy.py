@@ -1,8 +1,8 @@
 from discord.ext import commands
 from cogs.base_cog import BaseCog
 
-class EconomyCog(BaseCog):
-    def __init__(self):
+class cog_economy(BaseCog):
+    def __init__(self, client):
         #get database connection
         pass
 
