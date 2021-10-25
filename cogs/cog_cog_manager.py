@@ -1,10 +1,11 @@
 from discord.ext import commands
 import importlib
 from os import getcwd
+from cogs.base_cog import BaseCog
 
 class cog_cog_manager(commands.Cog):
     def __init__(self, client, *args):
-        self.cogs_classes = {}
+        self.cog_instances = {}
         print(f"CogManagerCog >>> Discovering Cogs")
         #iterate through args, accept the cogs that are valid and ignore invalid cogs
         for name in args:
@@ -14,8 +15,14 @@ class cog_cog_manager(commands.Cog):
                 cog_module = importlib.import_module("cogs." + name)
                 #success, try to access the class now
                 cog_class = getattr(cog_module, name)
-                #success! store the module and class
-                self.cogs_classes[name] = cog_class
+
+                #create instance of cog
+                cog_instance = cog_class(client)
+                #add cog to bot
+                client.add_cog(cog_instance)
+                #store instance of cog
+                self.cog_instances[name] = cog_instance
+
                 print(f"\tCog: {name} >>> [Valid]")
 
             except ImportError as e:
@@ -26,24 +33,17 @@ class cog_cog_manager(commands.Cog):
                 #oops, cog not found. oh well, ignore the cog
                 print(f"\tCog: {name} >>> [Invalid: Cog not present in file]")
                 print(e)
-        print(f"CogManagerCog >>> Valid Cogs Found: {len(self.cogs_classes)}")
+            except DependencyUnmetError as e:
+                #oops, dependency unmet. oh well, ignore the cog
+                print(f"\tCog: {name} >>> [Invalid: DependencyUnmetError]")
+                print(e)
+        print(f"CogManagerCog >>> Valid Cogs Found: {len(self.cog_instances)}")
 
-        #add cogs to bot
-        self.cog_instances = {}
-        for name, cog_class in self.cogs_classes.items():
-            print(f"\tCog: {name} >>> Initializing")
 
-            #create instance of cog
-            cog_instance = cog_class(client)
-            #add cog to bot
-            client.add_cog(cog_instance)
-            #store instance of cog
-            self.cog_instances[name] = cog_instance
-
-    #yields a cog if it is an instance of SetupCog
+    #yields a cog if it is an instance of BaseCog
     def get_cogs_with_setup(self):
         for cog in self.cog_instances.items():
-            if isinstance(cog, SetupCog):
+            if isinstance(cog, BaseCog):
                 yield cog
 
     @commands.group(pass_context=True, invoke_without_command=True)
