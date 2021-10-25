@@ -54,3 +54,6 @@ class cog_cog_manager(commands.Cog):
     @managecogs.command()
     async def list(self, ctx):
         await ctx.send()
+
+class DependencyUnmetError(Exception):
+    pass
