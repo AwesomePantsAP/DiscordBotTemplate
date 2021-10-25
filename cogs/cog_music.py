@@ -4,6 +4,7 @@ from discord import FFmpegPCMAudio
 from discord import TextChannel
 from youtube_dl import YoutubeDL
 import asyncio
+from cogs.base_cog import BaseCog
 
 #info about a song
 class Song():
@@ -46,7 +47,7 @@ def get_song_info(song_name):
             songs.append(Song(first_result['url'], first_result["title"], first_result["duration"]))
             return songs
 
-class MusicCog(commands.Cog):
+class MusicCog(BaseCog):
     def __init__(self, client):
         self.client = client
         self.queues = {}

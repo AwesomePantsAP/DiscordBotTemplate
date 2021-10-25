@@ -1,6 +1,7 @@
 from discord.ext import commands
+from cogs.base_cog import BaseCog
 
-class EconomyCog(commands.Cog):
+class EconomyCog(BaseCog):
     def __init__(self):
         #get database connection
         pass
@@ -29,4 +30,3 @@ class EconomyCog(commands.Cog):
     @economy.command()
     def pay(self, ctx, user):
         pass
-        

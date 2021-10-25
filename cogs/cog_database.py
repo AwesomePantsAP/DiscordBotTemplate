@@ -1,8 +1,9 @@
 from discord.ext import commands
 from cogs.setup_cog import SetupCog
 import sqlite3
+from cogs.base_cog import BaseCog
 
-class DatabaseCog(SetupCog):
+class DatabaseCog(BaseCog):
     #gets the database and checks that all servers have entries in the "servers" table
     def setup(self, client):
         #get the database connection

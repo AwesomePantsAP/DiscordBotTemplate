@@ -1,7 +1,6 @@
 from discord.ext import commands
 import importlib
 from os import getcwd
-from cogs.setup_cog import SetupCog
 
 class CogManagerCog(commands.Cog):
     def __init__(self, client, *args):
