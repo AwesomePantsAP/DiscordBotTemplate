@@ -12,7 +12,8 @@ client = commands.Bot(command_prefix='!')  # prefix our commands with '!'
 cog_manager = cog_cog_manager.cog_cog_manager(
     client,
     "cog_music",
-    "cog_database"
+    "cog_database",
+    "cog_economy"
 )
 
 @client.event  # check if bot is ready
