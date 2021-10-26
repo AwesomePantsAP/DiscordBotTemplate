@@ -19,7 +19,6 @@ class cog_economy(BaseCog):
 
         #create the table in the database if it doesn't exist
         create_table_query = """CREATE TABLE IF NOT EXISTS balances (
-            balance_id INTEGER PRIMARY KEY NOT NULL UNIQUE,
             balance INTEGER,
             uuid VARCHAR(18) NOT NULL,
             guild_id VARCHAR(18) NOT NULL
@@ -98,7 +97,7 @@ class cog_economy(BaseCog):
         result = self.db_cog.do_query(get_balance_query, (uuid, guild_id)).fetchone()
 
         #if it's none, return none
-        if isinstance(result, None):
+        if isinstance(result, type(None)):
             return None
         #otherwise, it's a tuple; return the first element
         else:
@@ -162,7 +161,7 @@ class cog_economy(BaseCog):
 
         #reply with the balance(if it exists)
         if not bal is None:
-            await ctx.send(f"{ctx.author.mention} Your balance is: {bal}")
+            await ctx.send(f"{ctx.author.mention} Your balance is: ${bal}")
         #otherwise, inform the user they do not have a balance
         else:
             await ctx.send(f"{ctx.author.mention} You do not have a balance! Create one with {ctx.bot.command_prefix}economy createbalance")
