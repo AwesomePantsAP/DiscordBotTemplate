@@ -46,6 +46,11 @@ class cog_economy(BaseCog):
         get_balance_query = "SELECT balance FROM balances WHERE uuid=? AND guild_id=?"
         return self.db_cog.do_query(get_balance_query, (uuid, guild_id))
 
+    #removes a balance entry belonging to uuid in guild_id
+    def remove_balance(self, uuid, guild_id):
+        remove_balance_query = "DELETE FROM balances WHERE uuid=? AND guild_id=?"
+        return self.db_cog.do_query(remove_balance_query, (uuid, guild_id))
+
     @commands.group(pass_context=True, invoke_without_command=True)
     async def economy(self, ctx):
         if ctx.invoked_subcommand is None:
