@@ -39,3 +39,7 @@ class cog_database(BaseCog):
     def do_query(self, query, arguments=()):
         cursor = self.connection.cursor()
         return cursor.execute(query, arguments)
+
+    #commits changes done to the database
+    def commit(self):
+        self.connetion.commit()
