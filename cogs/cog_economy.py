@@ -16,10 +16,20 @@ class cog_economy(BaseCog):
             #raise an exception if it's not present
             raise DependencyUnmetError("Dependency `cog_database` Unmet in `cog_economy!`")
 
+        #create the table in the database if it doesn't exist
+        create_table_query = """CREATE TABLE IF NOT EXISTS balances (
+            balance_id INTEGER PRIMARY KEY NOT NULL UNIQUE,
+            balance INTEGER,
+            uuid VARCHAR(18) NOT NULL,
+            guild_id VARCHAR(18) NOT NULL
+        )
+        """
+        self.db_cog.do_query(create_table_query)
+
     @commands.group(pass_context=True, invoke_without_command=True)
     async def economy(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.send("<@521285684271513601> Implement a help message system already you lazy bitch")
+            await ctx.send("<@521285684271513601> Implement a help message system already you lazy bastard")
 
     @economy.command()
     async def balance(self, ctx):
