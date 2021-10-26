@@ -11,6 +11,8 @@ class cog_economy(BaseCog):
             raise DependencyUnmetError("Dependency `cog_database` Unmet in `cog_economy!`")
 
     def setup(self, client):
+        #store client
+        self.client = client
         #get database cog
         self.db_cog = client.get_cog("cog_database")
         if self.db_cog is None:
@@ -19,6 +21,7 @@ class cog_economy(BaseCog):
 
         #create the table in the database if it doesn't exist
         create_table_query = """CREATE TABLE IF NOT EXISTS balances (
+            balance_id INTEGER PRIMARY KEY AUTOINCREMENT
             balance INTEGER,
             uuid VARCHAR(18) NOT NULL,
             guild_id VARCHAR(18) NOT NULL
@@ -178,7 +181,38 @@ class cog_economy(BaseCog):
     #get the highest balance in the guild
     @economy.command()
     async def baltop(self, ctx, check_users=10):
-        pass
+        #start the final message
+        message = "Top balances:```\n"
+        #template for a balance entry
+        balance_template = "\t{0}. {1}: {2} \n"
+
+        #get the top n balances
+        get_balances_query = "SELECT balance, uuid FROM balances WHERE guild_id=? ORDER BY balance"
+        result = self.db_cog.do_query(get_balances_query, (ctx.guild.id))
+
+        if not result is None:
+            #iterate through the rows in the result
+            i = 1 # entry counter
+            for row in result:
+                #exit the loop if we've added enough entries
+                if i > check_users:
+                    break
+
+                balance = row[0] # user balance
+
+                user = self.client.get_user(row[1]) # user
+                user_fullname = user.name + "#" + user.discriminator # username + discriminator
+
+                #append the formatted entry
+                message += balance_template.format(str(i), user_fullname, f"${balance}")))
+
+                #increment the counter
+                i += 1
+
+            #close the codeblock
+            message += "```"
+            #send the message
+            await ctx.send(message)
 
     #check another user's balance in the guild
     @economy.command()
