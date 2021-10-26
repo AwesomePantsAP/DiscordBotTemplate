@@ -126,25 +126,29 @@ class cog_economy(BaseCog):
     @commands.group(pass_context=True, invoke_without_command=True)
     async def economy(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.send("<@521285684271513601> Implement a help message system already you lazy bastard")
+            await ctx.send("<@521285684271513601> Implement a help message system already you lazy bitch")
 
     #get the balance of the author
     @economy.command()
     async def balance(self, ctx):
         pass
 
+    #shorthand for !economy balance
     @economy.command()
     async def bal(self, ctx):
         await self.balance(ctx)
 
+    #get the highest balance in the guild
     @economy.command()
     async def baltop(self, ctx, check_users=10):
         pass
 
+    #check another user's balance in the guild
     @economy.command()
     async def checkbalance(self, ctx, user):
         pass
 
+    #pay user in the guild by amount
     @economy.command()
     async def pay(self, ctx, user, amount):
         pass
