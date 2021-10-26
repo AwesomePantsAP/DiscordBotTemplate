@@ -41,6 +41,7 @@ class cog_economy(BaseCog):
             create_balance_query = "INSERT INTO balances VALUES (?, ?, ?)"
             try:
                 self.db_cog.do_query(create_balance_query, (balance, uuid, guild_id))
+                self.db_cog.commit()
             except Exception as e:
                 #oops, something went wrong creating the balance, print a traceback
                 print(traceback.format_exc())
@@ -60,6 +61,7 @@ class cog_economy(BaseCog):
             change_balance_query = "UPDATE balances SET balance = balance + ? WHERE uuid=? AND guild_id=?"
             try:
                 self.db_cog.do_query(change_balance_query, (ammount, uuid, guild_id))
+                self.db_cog.commit()
             except Exception as e:
                 #oops, something went wrong changing the balance, print a traceback
                 print(traceback.format_exc())
@@ -79,6 +81,7 @@ class cog_economy(BaseCog):
             set_balance_query = "UPDATE balances SET balance = ? WHERE uuid=? AND guild_id=?"
             try:
                 self.db_cog.do_query(set_balance_query, (balance, uuid, guild_id))
+                self.db_cog.commit()
             except Exception as e:
                 #oops, something went wrong setting the balance, print a traceback
                 print(traceback.format_exc())
@@ -110,6 +113,7 @@ class cog_economy(BaseCog):
             remove_balance_query = "DELETE FROM balances WHERE uuid=? AND guild_id=?"
             try:
                 return self.db_cog.do_query(remove_balance_query, (uuid, guild_id))
+                self.db_cog.commit()
             except Exception as e:
                 #oops, something went wrong removing the balance, print a traceback
                 print(traceback.format_exc())
