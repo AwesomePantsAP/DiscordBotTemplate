@@ -129,7 +129,7 @@ class cog_economy(BaseCog):
             await ctx.send("<@521285684271513601> Implement a help message system already you lazy bitch")
 
     #creates a balance for the author in the guild
-    @economy.commands()
+    @economy.command()
     async def createbalance(self, ctx):
         #get the author uuid
         uuid = ctx.author.id
@@ -161,7 +161,7 @@ class cog_economy(BaseCog):
         bal = self.get_balance(uuid, guild_id)
 
         #reply with the balance(if it exists)
-        if not bal is None
+        if not bal is None:
             await ctx.send(f"{ctx.author.mention} Your balance is: {bal}")
         #otherwise, inform the user they do not have a balance
         else:
