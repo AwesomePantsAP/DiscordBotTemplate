@@ -18,7 +18,7 @@ class cog_database(BaseCog):
 
         #iterate through the guilds the bot is in and ensure they have an entry
         #in the `guilds` table
-        for guild in bot.guilds:
+        for guild in client.guilds:
             print(f"DatabaseCog >>> Checking record for {guild.id}::`{guild.name}`")
             guild_record = self.do_query("SELECT * FROM guilds WHERE guild_id = ?;", (str(guild.id),)).fetchone()
 
