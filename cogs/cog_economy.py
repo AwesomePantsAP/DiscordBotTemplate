@@ -52,7 +52,7 @@ class cog_economy(BaseCog):
             return True, ""
         else:
             #it exists. return an error message
-            return False, "Balance already exists!"
+            return False, "You already have a balance!"
 
     #changes balance by ammount
     def change_balance(self, ammount, uuid, guild_id):
@@ -71,7 +71,7 @@ class cog_economy(BaseCog):
             return True, ""
         else:
             #it doesn't exist. return an error message
-            return False, "Balance does not exist!"
+            return False, "You don't have a balance!"
 
     #sets the balance to balance
     def set_balance(self, balance, uuid, guild_id):
@@ -90,7 +90,7 @@ class cog_economy(BaseCog):
             return True, ""
         else:
             #it doesn't exist. return an error message
-            return False, "Balance does not exist!"
+            return False, "You don't have a balance!"
 
     #gets the balance belonging to uuid in guild_id
     def get_balance(self, uuid, guild_id):
@@ -121,7 +121,7 @@ class cog_economy(BaseCog):
             return True, ""
         else:
             #it doesn't exist. return an error message
-            return False, "Balance does not exist!"
+            return False, "You don't have a balance!"
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def economy(self, ctx):
