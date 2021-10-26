@@ -44,8 +44,8 @@ class cog_cog_manager(commands.Cog):
 
     #runs setup for all managed cogs
     def setup(self):
-        for cog in self.cog_instances:
-            cog.setup(self.client)
+        for cog_name in self.cog_instances:
+            self.client.get_cog(cog_name).setup(self.client)
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def managecogs(self, ctx):
