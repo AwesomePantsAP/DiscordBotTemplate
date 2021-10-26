@@ -5,6 +5,9 @@ from cogs.base_cog import BaseCog
 
 class cog_cog_manager(commands.Cog):
     def __init__(self, client, *args):
+        #store the client
+        self.client = client
+
         self.cog_instances = {}
         print(f"CogManagerCog >>> Discovering Cogs")
         #iterate through args, accept the cogs that are valid and ignore invalid cogs
@@ -39,12 +42,10 @@ class cog_cog_manager(commands.Cog):
                 print(e)
         print(f"CogManagerCog >>> Valid Cogs Found: {len(self.cog_instances)}")
 
-
-    #yields a cog if it is an instance of BaseCog
-    def get_cogs_with_setup(self):
-        for cog in self.cog_instances.items():
-            if isinstance(cog, BaseCog):
-                yield cog
+    #runs setup for all managed cogs
+    def setup(self):
+        for cog in self.cog_instances:
+            cog.setup(self.client)
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def managecogs(self, ctx):

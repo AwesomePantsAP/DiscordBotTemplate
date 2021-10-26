@@ -20,8 +20,8 @@ cog_manager = cog_cog_manager.cog_cog_manager(
 async def on_ready():
     print('Bot online')
 
-    for cog in cog_manager.get_cogs_with_setup():
-        cog.setup(client)
+    #setup all managed cogs
+    cog_manager.setup()
 
 # command to clear channel messages
 @client.command()
