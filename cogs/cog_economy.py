@@ -128,10 +128,44 @@ class cog_economy(BaseCog):
         if ctx.invoked_subcommand is None:
             await ctx.send("<@521285684271513601> Implement a help message system already you lazy bitch")
 
+    #creates a balance for the author in the guild
+    @economy.commands()
+    async def createbalance(self, ctx):
+        #get the author uuid
+        uuid = ctx.author.id
+        #get the guild id
+        guild_id = ctx.guild.id
+
+        starting_balance = 1000
+
+        #create a balance for the author
+        result, error = self.create_balance(starting_balance, uuid, guild_id)
+
+        #inform the user of the result and inform them of their balance
+        if result:
+            #successfully created balance for the author
+            await ctx.send(f"{ctx.author.mention} Successfully created balance: Your balance is ${starting_balance}")
+        else:
+            #inform the user of the error
+            await ctx.send(f"{ctx.author.mention} {error}")
+
     #get the balance of the author
     @economy.command()
     async def balance(self, ctx):
-        pass
+        #get the author uuid
+        uuid = ctx.author.id
+        #get the guild id
+        guild_id = ctx.guild.id
+
+        #get the balance
+        bal = self.get_balance(uuid, guild_id)
+
+        #reply with the balance(if it exists)
+        if not bal is None
+            await ctx.send(f"{ctx.author.mention} Your balance is: {bal}")
+        #otherwise, inform the user they do not have a balance
+        else:
+            await ctx.send(f"{ctx.author.mention} You do not have a balance! Create one with {ctx.bot.command_prefix}economy createbalance")
 
     #shorthand for !economy balance
     @economy.command()
