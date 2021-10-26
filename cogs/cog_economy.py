@@ -1,6 +1,7 @@
 from discord.ext import commands
 from cogs.base_cog import BaseCog
 from cogs.cog_cog_manager import DependencyUnmetError
+import traceback
 
 class cog_economy(BaseCog):
     def __init__(self, client):
@@ -35,18 +36,61 @@ class cog_economy(BaseCog):
 
     #creates a balance totaling balance for user uuid in guild guild_id
     def create_balance(self, balance, uuid, guild_id):
-        create_balance_query = "INSERT INTO balances VALUES (?, ?, ?)"
-        self.db_cog.do_query(create_balance_query, (balance, uuid, guild_id))
+        #check if the balance already exists
+        if not self.does_balance_exist(uuid, guild_id):
+            #it doesn't exist; create it
+            create_balance_query = "INSERT INTO balances VALUES (?, ?, ?)"
+            try:
+                self.db_cog.do_query(create_balance_query, (balance, uuid, guild_id))
+            except Exception as e:
+                #oops, something went wrong creating the balance, print a traceback
+                print(traceback.format_exc())
+                #return an error message
+                return False, "Something went wrong there. Please try again later."
+
+            #return no error messsage
+            return True, ""
+        else:
+            #it exists. return an error message
+            return False, "Balance already exists!"
 
     #changes balance by ammount
     def change_balance(self, ammount, uuid, guild_id):
-        change_balance_query = "UPDATE balances SET balance = balance + ? WHERE uuid=? AND guild_id=?"
-        self.db_cog.do_query(change_balance_query, (ammount, uuid, guild_id))
+        #check if the balance already exists
+        if self.does_balance_exist(uuid, guild_id):
+            change_balance_query = "UPDATE balances SET balance = balance + ? WHERE uuid=? AND guild_id=?"
+            try:
+                self.db_cog.do_query(change_balance_query, (ammount, uuid, guild_id))
+            except Exception as e:
+                #oops, something went wrong changing the balance, print a traceback
+                print(traceback.format_exc())
+                #return an error message
+                return False, "Something went wrong there. Please try again later."
+
+            #return no error messsage
+            return True, ""
+        else:
+            #it doesn't exist. return an error message
+            return False, "Balance does not exist!"
 
     #sets the balance to balance
     def set_balance(self, balance, uuid, guild_id):
-        set_balance_query = "UPDATE balances SET balance = ? WHERE uuid=? AND guild_id=?"
-        self.db_cog.do_query(set_balance_query, (balance, uuid, guild_id))
+        #check if the balance already exists
+        if self.does_balance_exist(uuid, guild_id):
+            set_balance_query = "UPDATE balances SET balance = ? WHERE uuid=? AND guild_id=?"
+            try:
+                self.db_cog.do_query(set_balance_query, (balance, uuid, guild_id))
+            except Exception as e:
+                #oops, something went wrong setting the balance, print a traceback
+                print(traceback.format_exc())
+                #return an error message
+                return False, "Something went wrong there. Please try again later."
+
+            #return no error messsage
+            return True, ""
+        else:
+            #it doesn't exist. return an error message
+            return False, "Balance does not exist!"
 
     #gets the balance belonging to uuid in guild_id
     def get_balance(self, uuid, guild_id):
@@ -62,21 +106,36 @@ class cog_economy(BaseCog):
 
     #removes a balance entry belonging to uuid in guild_id
     def remove_balance(self, uuid, guild_id):
-        remove_balance_query = "DELETE FROM balances WHERE uuid=? AND guild_id=?"
-        return self.db_cog.do_query(remove_balance_query, (uuid, guild_id))
+        #check if the balance already exists
+        if self.does_balance_exist(uuid, guild_id):
+            remove_balance_query = "DELETE FROM balances WHERE uuid=? AND guild_id=?"
+            try:
+                return self.db_cog.do_query(remove_balance_query, (uuid, guild_id))
+            except Exception as e:
+                #oops, something went wrong removing the balance, print a traceback
+                print(traceback.format_exc())
+                #return an error message
+                return False, "Something went wrong there. Please try again later."
+
+            #return no error messsage
+            return True, ""
+        else:
+            #it doesn't exist. return an error message
+            return False, "Balance does not exist!"
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def economy(self, ctx):
         if ctx.invoked_subcommand is None:
             await ctx.send("<@521285684271513601> Implement a help message system already you lazy bastard")
 
+    #get the balance of the author
     @economy.command()
     async def balance(self, ctx):
         pass
 
     @economy.command()
     async def bal(self, ctx):
-        self.balance(ctx)
+        await self.balance(ctx)
 
     @economy.command()
     async def baltop(self, ctx, check_users=10):
@@ -87,5 +146,5 @@ class cog_economy(BaseCog):
         pass
 
     @economy.command()
-    async def pay(self, ctx, user):
+    async def pay(self, ctx, user, amount):
         pass
