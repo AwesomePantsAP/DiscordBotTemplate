@@ -44,7 +44,14 @@ class cog_economy(BaseCog):
     #gets the balance belonging to uuid in guild_id
     def get_balance(self, uuid, guild_id):
         get_balance_query = "SELECT balance FROM balances WHERE uuid=? AND guild_id=?"
-        return self.db_cog.do_query(get_balance_query, (uuid, guild_id))
+        result = self.db_cog.do_query(get_balance_query, (uuid, guild_id)).fetchone()
+
+        #if it's none, return none
+        if isinstance(result, None):
+            return None
+        #otherwise, it's a tuple; return the first element
+        else:
+            return result[0]
 
     #removes a balance entry belonging to uuid in guild_id
     def remove_balance(self, uuid, guild_id):
