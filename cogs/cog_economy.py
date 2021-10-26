@@ -26,6 +26,13 @@ class cog_economy(BaseCog):
         """
         self.db_cog.do_query(create_table_query)
 
+    #returns true if a balance exists
+    def does_balance_exist(self, uuid, guild_id):
+        #get the balance
+        balance = self.get_balance(uuid, guild_id)
+        #return if the balance exists or not
+        return balance != None
+
     #creates a balance totaling balance for user uuid in guild guild_id
     def create_balance(self, balance, uuid, guild_id):
         create_balance_query = "INSERT INTO balances VALUES (?, ?, ?)"
