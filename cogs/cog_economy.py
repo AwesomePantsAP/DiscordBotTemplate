@@ -26,6 +26,26 @@ class cog_economy(BaseCog):
         """
         self.db_cog.do_query(create_table_query)
 
+    #creates a balance totaling balance for user uuid in guild guild_id
+    def create_balance(self, balance, uuid, guild_id):
+        create_balance_query = "INSERT INTO balances VALUES (?, ?, ?)"
+        self.db_cog.do_query(create_balance_query, (balance, uuid, guild_id))
+
+    #changes balance by ammount
+    def change_balance(self, ammount, uuid, guild_id):
+        change_balance_query = "UPDATE balances SET balance = balance + ? WHERE uuid=? AND guild_id=?"
+        self.db_cog.do_query(change_balance_query, (ammount, uuid, guild_id))
+
+    #sets the balance to balance
+    def set_balance(self, balance, uuid, guild_id):
+        set_balance_query = "UPDATE balances SET balance = ? WHERE uuid=? AND guild_id=?"
+        self.db_cog.do_query(set_balance_query, (balance, uuid, guild_id))
+
+    #gets the balance belonging to uuid in guild_id
+    def get_balance(self, uuid, guild_id):
+        get_balance_query = "SELECT balance FROM balances WHERE uuid=? AND guild_id=?"
+        return self.db_cog.do_query(get_balance_query, (uuid, guild_id))
+
     @commands.group(pass_context=True, invoke_without_command=True)
     async def economy(self, ctx):
         if ctx.invoked_subcommand is None:
