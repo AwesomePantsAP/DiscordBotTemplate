@@ -12,8 +12,10 @@ DiscordBotTemplate is a basic, but functional and highly modular system for maki
 Ensure you have python 3.8 or above
 
 [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+
+Install dependencies by running [`python -m pip install -r requirements.txt`](https://stackoverflow.com/a/39537053/16886796)
 ## Usage
-Run `main.py` 
+Run `main.py`
 ## Contributing
 Create an issue for discussion or if you've spotted a bug
 
