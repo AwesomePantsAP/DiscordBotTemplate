@@ -1,5 +1,5 @@
 # DiscordBotTemplate
-DiscordBotTemplate is a basic, but functional and highly modular system for making [Discord](https://www.discord.com) [Bots](https://discord.com/developers/docs/intro#bots-and-apps).
+DiscordBotTemplate is a basic, highly modular system for making [Discord](https://www.discord.com) [Bots](https://discord.com/developers/docs/intro#bots-and-apps).
 
 ## Contents
   - [Installation](/readme.md#installation)
